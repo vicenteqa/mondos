@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run wdio && npm run wdio && npm run wdio",
+    "start:emulator": "./emulator @Pixel_3a_API_34_extension_level_7_arm64-v8a",
     "wdio": "wdio run ./wdio.conf.ts"
   },
   "author": "",
