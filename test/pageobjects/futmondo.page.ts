@@ -30,7 +30,9 @@ class Futmondo {
   }
 
   public get closeAfterAdButton() {
-    return $('//android.widget.Button[@content-desc="Cerrar"]');
+    const catalan = false;
+    if (catalan) return $('//android.widget.Button[@content-desc="Tancar"]');
+    else return $('//android.widget.Button[@content-desc="Cerrar"]');
   }
   /**
    * a method to encapsule automation code to interact with the page
@@ -50,15 +52,36 @@ class Futmondo {
   }
 
   public async getMondos(amount = 1) {
+    await this.reload();
     for (let i = 0; i < amount; i++) {
-      console.log("Has añadido " + 25 * i + " mondos a tu saldo");
+      // await this.cerrarAnuncio();
       await this.seeAdButton.click();
+      // await this.cerrarAnuncio();
       await this.confirmSeeAdButton.click();
+      // await this.cerrarAnuncio();
       await this.rewardObtainedButton.waitForDisplayed({ timeout: 60000 });
       await this.navigateBack();
+      // await this.cerrarAnuncio();
       await this.closeAfterAdButton.waitForDisplayed({ timeout: 60000 });
       await this.closeAfterAdButton.click();
     }
+  }
+
+  public async cerrarAnuncio() {
+    const ad = await $$('//android.widget.RelativeLayout/android.widget.FrameLayout/android.widget.FrameLayout');
+    if (ad.length === 1) {
+      await $('//android.view.View[@resource-id="mys-content"]/android.view.View[2]/android.widget.TextView').waitForDisplayed({ timeout: 10000 });
+      await $('//android.view.View[@resource-id="mys-content"]/android.view.View[2]/android.widget.TextView').click()
+    }
+
+  }
+
+  public async reload() {
+    const screen = await $('//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View');
+
+    await driver.touchAction({ action: 'tap', x: 254, y: 859, element: screen })
+
+    // await this.navigateBack();
   }
 }
 
